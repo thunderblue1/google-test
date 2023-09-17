@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymleaf.org" lang="en">
+	<head>
+	  <div th:replace="fragments/header-fragment::header"></div>
+	</head>
+	<div th:replace="fragments/navbar-fragment::navigation"></div>
+	<body>
+		<div class="container mt-4 rounded">
+			<div class="row">
+				<button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#create">
+				  Create Employee
+				</button>
+				
+				<!-- Create Employee Modal -->
+				<form class="form" action="#" th:action="@{/createEmployee}" th:object="${employeeModel}" method="post">
+					<div class="modal fade" id="create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <h5 class="modal-title" id="exampleModalLabel">Create Employee</h5>
+					        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					      </div>
+					      <div class="modal-body">	
+						      <div class="form__group">
+						        <input type="text" placeholder="First Name" th:field="*{firstName}" class="mt-2 w-100" />
+						        <input type="text" placeholder="Last Name" th:field="*{lastName}" class="mt-2 w-100" />
+	    					    <input type="email" placeholder="Email" th:field="*{email}" class="mt-2 w-100" />
+						        <input type="text" placeholder="Phone Number" th:field="*{phone}" class="mt-2 w-100" />
+						        <input type="text" placeholder="Position" th:field="*{position}" class="mt-2 w-100" />
+						        <textarea placeholder="Biographical" th:field="*{bio}" class="mt-2 w-100"></textarea>
+	   					        <input type="text" placeholder="Profile Photo" th:field="*{photo}" class="mt-2 w-100" />
+						        <input type="text" placeholder="Username" th:field="*{username}" class="mt-2 w-100" />
+						        <input type="text" placeholder="Password" th:field="*{pass}" class="mt-2 w-100" />
+								<button class="btn btn-primary w-100 mt-2" type="submit">Create Employee</button>
+						      </div>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				  <div th:if="${#fields.hasErrors('*')}">List of Errors</div>
+				  <div th:each="err : ${#fields.errors('*')}">
+				    <span style="color:red" th:text="${err}" class="fieldError"></span>
+				  </div>
+			    </form>
+			</div>
+			
+			<div class="row">
+		      <div class="col-sm-12 d-flex justify-content-center">
+		        <h1>CRUD Search for Employees</h1>
+		      </div>
+			</div>
+			<div class="row d-flex justify-content-center">
+		        <form th:action="@{/crud}" th:object="${searchform}" class="text-center">
+		          	  <input type="search" id="search" name="search" class="col-sm-6" placeholder="Search" />
+		              <button class="btn btn-primary col-sm-3" type="submit">Search</button>
+		        </form>
+		    </div>
+		    
+		    
+		   	<div class="row mt-4">
+			    <div th:each="employee : ${session.employees}" class="col-med-6 col-lg-3 mb-4 d-inline-flex">
+					<div class="card" style="width: 18rem;">
+					  <img th:src="${'/img/employees/'+employee.photo}" class="card-img-top" alt="employeePhoto">
+					  <div class="card-body">
+					    <h5 class="card-title" th:text="${employee.firstName+' '+employee.lastName}">Card title</h5>
+					    <p th:text="${'Id: '+employee.id}">Id</p>
+					    <p th:text="${'Position: '+employee.position}">Position</p>
+					    <p class="card-text" th:text="${'Username: '+employee.username}">Username</p>
+					    <p class="card-text text-truncate" th:text="${employee.bio}">Biography</p>
+					    <div class="row mt-auto no-gutters">
+		    				<button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="" th:attr="data-bs-target=${'#details'+employee.id}">
+							  Details
+							</button>
+						    <a class="btn btn-danger w-50" th:href="@{/delete(employeeid=${employee.id})}">Delete</a>
+	   				        <!-- <a class="btn btn-warning w-50" th:href="@{/update(employeeid=${employee.id})}">Populate Form</a> -->
+	   				        <button type="button" class="btn btn-warning w-50" data-bs-toggle="modal" data-bs-target="" th:attr="data-bs-target=${'#update'+employee.id}">
+							  Update
+							</button>
+	   				        
+						</div>
+					  </div>
+					</div>
+					
+					<div class="modal fade" id="" th:attr="id=${'details'+employee.id}" tabindex="-1" aria-labelledby="EmployeeDetails" aria-hidden="true">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <h5 class="modal-title" id="exampleModalLabel">Employee Details</h5>
+					        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					      </div>
+					      <div class="modal-body">
+   							<p th:text="${'Id: '+employee.id}"></p>
+							<p th:text="${'First Name: '+employee.firstName}"></p>
+							<p th:text="${'Last Name: '+employee.lastName}"></p>
+							<p th:text="${'Email: '+employee.email}"></p>
+							<p th:text="${'Phone: '+employee.phone}"></p>
+							<p th:text="${'Position: '+employee.position}"></p>
+							<p th:text="${'Bio: '+employee.bio}"></p>
+							<p th:text="${'Photo: '+employee.photo}"></p>
+							<p th:text="${'Username: '+employee.username}"></p>
+							<p th:text="${'Password: '+employee.pass}"></p>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+					
+				   <form class="form" action="#" th:action="@{/updateEmployee}" th:object="${employeeModel}" method="post">
+					<div class="modal fade" id="" th:attr="id=${'update'+employee.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <h5 class="modal-title" id="exampleModalLabel">Update Employee</h5>
+					        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					      </div>
+					      <div class="modal-body">	
+						      <div class="form__group">
+								<input type="number" placeholder="Employee Id" th:value="${employee.id}" id="id" name="id" class="mt-2 w-100" />
+						        <input type="text" placeholder="First Name" th:value="${employee.firstName}" id="firstName" name="firstName" class="mt-2 w-100" />
+						        <input type="text" placeholder="Last Name" th:value="${employee.lastName}" id="lastName" name="LastName" class="mt-2 w-100" />
+	    					    <input type="email" placeholder="Email" th:value="${employee.email}" id="email" name="email" class="mt-2 w-100" />
+						        <input type="text" placeholder="Phone Number" th:value="${employee.phone}" id="phone" name="phone" class="mt-2 w-100" />
+						        <input type="text" placeholder="Position" th:value="${employee.position}" id="position" name="position" class="mt-2 w-100" />
+						        <textarea placeholder="Biographical" id="bio" name="bio" class="mt-2 w-100"><div th:text="${employee.bio}" th:remove="tag"></div></textarea>
+	   					        <input type="text" placeholder="Profile Photo" th:value="${employee.photo}" id="photo" name="photo" class="mt-2 w-100" />
+						        <input type="text" placeholder="Username" th:value="${employee.username}" id="username" name="username" class="mt-2 w-100" />
+						        <input type="text" placeholder="Password" th:value="${employee.pass}" id="pass" name="pass" class="mt-2 w-100" />
+								<button class="btn btn-primary w-100 mt-2" type="submit">Update Employee</button>
+						      </div>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+			    </form>
+					
+				</div>    
+    		</div>
+    
+		</div>
+	</body>
+
+</html>

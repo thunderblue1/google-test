@@ -1,0 +1,32 @@
+<html>
+	<head>
+	  <div th:replace="fragments/header-fragment::header"></div>
+	</head>
+	<div th:replace="fragments/navbar-fragment::navigation"></div>
+	<body>
+		<div class="container mt-4 rounded">
+			<div th:if="${session.empid=='false'||session.empid==null}">
+				<p>The user has no profile becuase they are not logged in.</p>
+			</div>
+			<div th:if="${session.empid!='false'&&session.empid!=null}">
+				<div class="row">
+					<div class="col col-sm-12 col-md-6">
+						<img class="w-100" th:src="${'/img/employees/'+user.getPhoto()}" />					
+					</div>
+					<div class="col col-sm-12 col-md-6">
+						<h1 th:text="${user.getFirstName()+' '+user.getLastName}"></h1>
+						<p th:text="${'Employee Id: '+user.getId()}"></p>
+						<p th:text="${'Email: '+user.getEmail()}"></p>
+						<p th:text="${'Phone: '+user.getPhone()}"></p>
+						<p th:text="${'Position: '+user.getPosition()}"></p>
+						<p th:text="${'Bio: '+user.getBio()}"></p>
+						<p th:text="${'Username: '+user.getUsername()}"></p>
+					</div>
+					<div class="col col-sm-12 col-md-6">
+					
+					</div>
+			</div>
+		</div>
+	</body>
+
+</html>
